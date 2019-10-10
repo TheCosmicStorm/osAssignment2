@@ -1,0 +1,23 @@
+Time:   1  MISS:    page   0                              frames: -1  -1   0 
+Time:   2  MISS:    page   1                              frames: -1   0   1 
+Time:   3  MISS:    page   2                              frames:  0   1   2 
+Time:   4  HIT:     page   2                              frames:  0   1   2 
+Time:   5  HIT:     page   1                              frames:  0   1   2 
+Time:   6  HIT:     page   0                              frames:  0   1   2 
+Time:   7  MISS:    page  15   REPLACE: page   2 (DIRTY)  frames:  0   1  15 
+Time:   8  HIT:     page  15                              frames:  0   1  15 
+Time:   9  HIT:     page   0                              frames:  0   1  15 
+Time:  10  MISS:    page   5   REPLACE: page   1 (DIRTY)  frames:  0   5  15 
+Time:  11  MISS:    page   4   REPLACE: page  15 (DIRTY)  frames:  0   4   5 
+Time:  12  HIT:     page   4                              frames:  0   4   5 
+Time:  13  HIT:     page   5                              frames:  0   4   5 
+Time:  14  HIT:     page   5                              frames:  0   4   5 
+Time:  15  HIT:     page   4                              frames:  0   4   5 
+Time:  16  HIT:     page   5                              frames:  0   4   5 
+Time:  17  MISS:    page   3   REPLACE: page   0          frames:  3   4   5 
+Time:  18  MISS:    page   2   REPLACE: page   4          frames:  2   3   5 
+Time:  19  HIT:     page   5                              frames:  2   3   5 
+Time:  20  MISS:    page   1   REPLACE: page   3          frames:  1   2   5 
+Time:  21  MISS:    page   0   REPLACE: page   2          frames:  0   1   5 
+Time:  22  MISS:    page  10   REPLACE: page   5 (DIRTY)  frames:  0   1  10 
+Time:  23  MISS:    page   9   REPLACE: page   1          frames:  0   9  10 

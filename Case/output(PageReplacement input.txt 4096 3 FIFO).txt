@@ -1,0 +1,4 @@
+events in trace:    23
+total disk reads:   14
+total disk writes:  5
+page faults:        14
