@@ -5,6 +5,7 @@ class Page {
     int age; //time page has existed
     int tlu; //time last used
 public:
+    //Contructor
     Page() {
         age = 0;
         tlu = 0;
@@ -27,7 +28,7 @@ public:
         return tlu;
     }
 
-
+    //Destructor
     ~Page();
 };
 
