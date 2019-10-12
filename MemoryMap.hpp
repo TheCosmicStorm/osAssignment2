@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <iostream>
 
 class MemoryMap {
 private:
@@ -30,7 +31,7 @@ public:
             for (int j = 0; j < num_frames; j++) {
                 std::cout << working_memory[i][j] << " ";
             }
-        std::cout << endl;
+        std::cout << std::endl;
         }
     }
 
@@ -40,17 +41,12 @@ public:
         for (int i = 0; i < num_frames; i++) {
             std::cout << working_memory[working_memory.size()-1][i] << " ";
         }
-        std::cout << endl;
+        std::cout << std::endl;
     }
 
     // Deconstructor
     ~MemoryMap() {
         // Cleans memory and deletes entire memory queue
-        for (int i = 0; i < working_memory.size(); i++) {
-            for (int j = 0; j < num_frames; j++) {
-                delete working_memory[i][j];
-            }
-        }
     }
 };
 
