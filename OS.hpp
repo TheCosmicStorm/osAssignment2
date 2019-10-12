@@ -60,8 +60,10 @@ public:
         for (int i = 0; i < traces.size(); i++) {
             //separates trace into command and address
             command = std::get<0>(traces[i]);
+            std::cout << command << ' ';
             commands.push_back(command);
             address = hexConvert(std::get<1>(traces[i]));
+            std::cout << address << '\n';
             addresses.push_back(address);
 
             //checks if currrent page number greater than the largest
@@ -77,6 +79,7 @@ public:
             temp = new Page;
             disk_memory.push_back(temp);
         }
+        std::cout << disk_memory.size() << '\n';
     }
 
     void runOS(std::string algorithm)
