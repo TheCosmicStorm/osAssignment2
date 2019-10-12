@@ -1,3 +1,6 @@
+//Rory Martin a1740203
+//William Godfrey a1743033
+
 #include "MemoryMap.hpp"
 #include "Page.hpp"
 #include <cmath>
@@ -54,12 +57,12 @@ public:
         int address;
         int pageNumber;
         int largest = -1;
-        for (i = 0; i < traces.size(); i++) {
+        for (int i = 0; i < traces.size(); i++) {
             //separates trace into command and address
-            command = traces[i].get<0>;
+            command = std::get<0>(traces[i]);
             commands.push_back(command);
-            address = hexConvert(traces[i].get<1>);
-            addresses.push_back(addresss);
+            address = hexConvert(std::get<1>(traces[i]));
+            addresses.push_back(address);
 
             //checks if currrent page number greater than the largest
             pageNumber = address/page_size;
@@ -72,7 +75,7 @@ public:
         Page* temp;
         for (int i = 0; i < largest+1; i++) {
             temp = new Page;
-            disk_memory.push_back(temp)
+            disk_memory.push_back(temp);
         }
     }
 

@@ -4,7 +4,6 @@
 #ifndef MEMORYMAP_H
 #define MEMORYMAP_H
 #include "Page.hpp"
-#include <algorithm>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -26,7 +25,7 @@ public:
 
     // Prints the entire current map
     void printMap() {
-        std::cout << "Current Map:" << endl;
+        std::cout << "Current Map:" << std::endl;
         for (int i = 0; i < working_memory.size(); i++) {
             for (int j = 0; j < num_frames; j++) {
                 std::cout << working_memory[i][j] << " ";
@@ -37,7 +36,7 @@ public:
 
     // Prints the current maps last unit
     void printCurrent() {
-        std::cout << "Current Time:" << endl;
+        std::cout << "Current Time:" << std::endl;
         for (int i = 0; i < num_frames; i++) {
             std::cout << working_memory[working_memory.size()-1][i] << " ";
         }

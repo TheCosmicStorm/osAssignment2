@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include "Customer.hpp"
-#include "Queue.hpp"
-#include "OperatingSystem.hpp"
+#include "Page.hpp"
+#include "MemoryMap.hpp"
+#include "OS.hpp"
 
 using namespace std;
 
@@ -48,7 +48,7 @@ vector<pair<char,string>> processInput(vector<string> input) {
         ss << input.at(i);
         ss >> command;
         ss >> address;
-        temp = make_pair(command,address)
+        temp = make_pair(command,address);
         traces.push_back(temp);
     }
 
