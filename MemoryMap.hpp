@@ -49,7 +49,7 @@ public:
 
             // Find page to replace with largest age, in the current frame
             for (int j = 1; j < num_frames; j++) {
-                if (working_memory[working_memory.size()-1][j].getAge() > largestCurrAge.getAge()) {
+                if (working_memory[working_memory.size()-1][j]->getAge() > largestCurrAge->getAge()) {
                     largestCurrAge = working_memory[working_memory.size()-1][j];
                 }
             }
@@ -59,15 +59,15 @@ public:
 
         // Least Recently Used implementation
         else if (algorithm == "LRU") {
-            Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0].getTLU();
+            Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
             //TLU = time last used
             // Find page to replace with least recently used
             for (int j = 1; j < num_frames; j++) {
-                if (working_memory[working_memory.size()-1][j].getTLU() < leastRecentlyUsed.getTLU()) {
-                    leastRecentlyUsed = working_memory[working_memory.size()-1][i];
+                if (working_memory[working_memory.size()-1][j]->getTLU() < leastRecentlyUsed->getTLU()) {
+                    leastRecentlyUsed = working_memory[working_memory.size()-1][j];
                 }
-                else if (working_memory[working_memory.size()-1][j].getTLU() == leastRecentlyUsed.getTLU()){
-                    if (working_memory[working_memory.size()-1][j].getAge() > leastRecentlyUsed.getAge()) {
+                else if (working_memory[working_memory.size()-1][j]->getTLU() == leastRecentlyUsed->getTLU()){
+                    if (working_memory[working_memory.size()-1][j]->getAge() > leastRecentlyUsed->getAge()) {
                         leastRecentlyUsed = working_memory[working_memory.size()-1][j];
                     }
                 }
@@ -148,7 +148,10 @@ public:
     {
         for (int i = 0; i < num_frames; i++)
         {
-            working_memory[working_memory.size()-1][i]->increaseAge();
+            if (working_memory[working_memory.size()-1][i] != nullptr)
+            {
+                working_memory[working_memory.size()-1][i]->increaseAge();
+            }
         }
     }
 

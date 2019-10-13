@@ -133,6 +133,8 @@ private:
     std::vector<int> addresses;
     //stores a list of all pages
     std::vector<Page*> disk_memory;
+    //allocatedSpace
+    int allocated_space;
     //page size from input
     int page_size;
     //current operation
@@ -140,7 +142,7 @@ private:
     //number of reads
     int reads;
     //number of writes
-    int writes
+    int writes;
 
     //ARB and WSARB
     int a;
@@ -214,9 +216,9 @@ public:
         std::cout << disk_memory.size() << '\n';
     }
 
-    void runOS(std::string algorithm) {
-        MemoryMap map;
-        int pageNumber
+    void runOS(std::string algorithm, int allocatedSpace) {
+        MemoryMap map (allocatedSpace);
+        int pageNumber;
         Page* incomingPage;
         Page* pageToReplace;
         for (int i = 0; i < commands.size(); i++) {
