@@ -25,14 +25,13 @@ public:
         working_memory.push_back(empty);
     }
 
-    //determines whether a page is in working_memory
+    // Determines whether a page is in working_memory
     bool findPage(Page* page) {
         for (int j = 0; j < num_frames; j++) {
             if (page == working_memory[working_memory.size()-1][j]) {
                 return true;
             }
         }
-        
         return false;
     }
 
@@ -62,30 +61,27 @@ public:
             return largestCurrAge;
         }
 
-        //Least Recently Used implementation
-        else if (algorithm == "LRU")
-        {
+        // Least Recently Used implementation
+        else if (algorithm == "LRU") {
             /* code */
         }
 
-        //Additional Reference Bit implementation
-        else if (algorithm == "ARB")
-        {
+        // Additional Reference Bit implementation
+        else if (algorithm == "ARB") {
 
         }
 
-        //Working-Set Additional Reference Bit implementation
-        else if (algorithm == "WSARB")
-        {
+        // Working-Set Additional Reference Bit implementation
+        else if (algorithm == "WSARB") {
             /* code */
         }
         current_frame++;
         current_page++;
     }
 
-    //replaces page in working with new page
+    // Replaces page in working with new page
     bool replacePage(Page* prevPage, Page* newPage) {
-
+        // Replace based on position or value?
     }
 
     // Prints the entire current map
@@ -110,7 +106,6 @@ public:
 
     // Deconstructor
     ~MemoryMap() {
-        // Cleans memory and deletes entire memory queue
     }
 };
 

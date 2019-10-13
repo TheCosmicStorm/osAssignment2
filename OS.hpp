@@ -34,14 +34,13 @@ private:
     int hexConvert(std::string hexadecimal) {
         int converted = 0;
 
-        //runs through each character of a hexadecimal string and adds it to
+        // Runs through each character of a hexadecimal string and adds it to
         // a base 10 int total
         for (int i = 0; i < hexadecimal.size(); i++) {
             // If a number: (num x 16^(7-i))
             if (isdigit(hexadecimal[i])) {
                 converted += (hexadecimal[i]-'0') * (std::pow(16, 7-i));
             }
-
             // If a letter: (letterHex x 16^(7-i))
             else if (isalpha(hexadecimal[i])) {
                 converted += ((hexadecimal[i]-'0')-39) * (std::pow(16, 7-i));
@@ -49,6 +48,7 @@ private:
         }
         return converted;
     }
+    
 public:
     //Constructor
     //inA, inB, inDelta all = 0 if not ARB or WSARB
@@ -63,17 +63,17 @@ public:
     }
 
     // Counts up the total number of pages that would be in disk_memory and then
-    // creates that number of pages and stores them in disk_memory
+    // Creates that number of pages and stores them in disk_memory
     void initialiseOS(std::vector<std::pair<char,std::string>> traces) {
 
-        //runs through all the traces finding the largest page number
-        //also separates traces into the 2 vectors: commands and addresses
+        // Runs through all the traces finding the largest page number
+        // Also separates traces into the 2 vectors: commands and addresses
         char command;
         int address;
         int pageNumber;
         int largest = -1;
         for (int i = 0; i < traces.size(); i++) {
-            //separates trace into command and address
+            // Separates trace into command and address
             command = std::get<0>(traces[i]);
             std::cout << command << ' ';
             commands.push_back(command);
@@ -81,14 +81,14 @@ public:
             std::cout << address << '\n';
             addresses.push_back(address);
 
-            //checks if currrent page number greater than the largest
+            // Checks if currrent page number greater than the largest
             pageNumber = address/page_size;
             if (pageNumber > largest) {
                 largest = pageNumber;
             }
         }
 
-        //fills the disk memory with largest page number + 1 pages
+        // Fills the disk memory with largest page number + 1 pages
         Page* temp;
         for (int i = 0; i < largest+1; i++) {
             temp = new Page;
@@ -97,25 +97,20 @@ public:
         std::cout << disk_memory.size() << '\n';
     }
 
-    void runOS(std::string algorithm)
-    {
+    void runOS(std::string algorithm) {
         MemoryMap map;
         Page* incomingPage;
-        for (int i = 0; i < commands.size(); i++)
-        {
+        for (int i = 0; i < commands.size(); i++) {
             incomingPage = addresses[i]/pageSize;
             
             map.determinePageToReplace(algorithm);
-
         }
     }
 
     //Destructor
-    ~OS()
-    {
+    ~OS() {
         // Deletes all elements of disk_memory to clean up computer memory
-        for (int i = 0; i < disk_memory.size(); i++)
-        {
+        for (int i = 0; i < disk_memory.size(); i++) {
             delete disk_memory[i];
         }
     }

@@ -17,7 +17,7 @@ public:
     }
 
     //USEFUL FUNCTIONS
-    //age
+    // Age
     void increaseAge() {
         age++;
     }
@@ -28,7 +28,7 @@ public:
         return age;
     }
 
-    //time last used
+    // Time last used
     void setTLU(int newTime) {
         tlu = newTime;
     }
@@ -36,13 +36,11 @@ public:
         return tlu;
     }
 
-    //write functions
-    void toBeWritten()
-    {
+    // Write functions
+    void toBeWritten() {
         write = true;
     }
-    void written()
-    {
+    void written() {
         write = false;
     }
 
