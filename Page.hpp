@@ -37,6 +37,9 @@ public:
     }
 
     // Write functions
+    bool needsToBeWritten() {
+        return write;
+    }
     void toBeWritten() {
         write = true;
     }

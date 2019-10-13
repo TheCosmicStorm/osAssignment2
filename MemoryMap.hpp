@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstddef>
 
 class MemoryMap {
 private:
@@ -19,7 +20,7 @@ public:
     MemoryMap(int allocatedSpace) {
         // Initializes empty vector onto memory map
         num_frames = allocatedSpace;
-        std::vector<Page*> empty (num_frames);
+        std::vector<Page*> empty (num_frames, nullptr);
         working_memory.push_back(empty);
     }
 
@@ -36,93 +37,91 @@ public:
     // Determines based on the algorithm, which page/frame gets replaced
     // Has 4 unique applications/ algorithms
     Page* determinePageToReplace(std::string algorithm) {
-        int current_page = 0;// How is next page found/ updated
-        // This value is used as an iterator
-        // Needs the position of whatever page it is up to
-        
-        // Where is page value stored?
-        
-        
-        // If frame space quota not yet full; populate
-        if (working_memory[working_memory.size()].size() < num_frames) {
-            for (int i = 0; i < num_frames; i++) {
-                working_memory[working_memory.size()][i].push_back(disk_memory[current_page]);
+
+        for (int j = 0; j < num_frames; j++) {
+            if (working_memory[working_memory.size()-1][j] == nullptr) {
+                return nullptr;
             }
         }
-        
         //First In, First Out implementation
         if (algorithm == "FIFO") {
-            Page* largestCurrAge;
-    
+            Page* largestCurrAge = working_memory[working_memory.size()-1][0];
+
             // Find page to replace with largest age, in the current frame
-            for (int i = 0; i < num_frames; i++) {
-                if (working_memory[working_memory.size()][i].getAge() > largestCurrAge.getAge()) {
-                    largestCurrAge.getAge() = working_memory[working_memory.size()][i].getAge();
-                    // Return page position to replace?
+            for (int j = 1; j < num_frames; j++) {
+                if (working_memory[working_memory.size()-1][j].getAge() > largestCurrAge.getAge()) {
+                    largestCurrAge = working_memory[working_memory.size()-1][j];
                 }
             }
+
             return largestCurrAge;
         }
 
         // Least Recently Used implementation
         else if (algorithm == "LRU") {
-            Page* lowestTimeUsed;
-            
+            Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0].getTLU();
+            //TLU = time last used
             // Find page to replace with least recently used
-            for (int i = 0; i < num_frames; i++) {
-                if (working_memory[working_memory.size()][i].getTLU() > lowestTimeUsed.getTLU()) {
-                    lowestTimeUsed.getTLU() = working_memory[working_memory.size()][i].getTLU();
+            for (int j = 1; j < num_frames; j++) {
+                if (working_memory[working_memory.size()-1][j].getTLU() < leastRecentlyUsed.getTLU()) {
+                    leastRecentlyUsed = working_memory[working_memory.size()-1][i];
                 }
-                // TLU must be reset to 0 for this case. Put in replace or here?
-                   if (disk_memory[current_page] == working_memory[working_memory.size()][i].getTLU() &&
-                       i = num_frames-1) {
-                       working_memory[working_memory.size()][i].setTLU(0);
-                   }
+                else if (working_memory[working_memory.size()-1][j].getTLU() == leastRecentlyUsed.getTLU()){
+                    if (working_memory[working_memory.size()-1][j].getAge() > leastRecentlyUsed.getAge()) {
+                        leastRecentlyUsed = working_memory[working_memory.size()-1][j];
+                    }
+                }
             }
-            return lowestTimeUsed;
+            return leastRecentlyUsed;
         }
 
         // Additional Reference Bit implementation
-        else if (algorithm == "ARB") {
-            Page* scrambledBits, lowestTimeUsed;
-            // To begin, need to scramble each the history of each page TLU.
-            // A is the number of bits to shift
-            // B is length of time interval
-            
-            // Scramble every interval of inB
-            if (current_page % inB == 0 && current_page != 0) {
-                for (int i = 0; i < num_frames; i++) {
-                    scrambledBits = working_memory[working_memory.size()][i].getTLU();
-                    // Right shift by inA bits.
-                    // Update new value.
-                    working_memory[working_memory.size()][i].getTLU() = scrambledBits;
-                }
-            }
-            
-            // Otherwise find page to replace with least recently used
-            for (int i = 0; i < num_frames; i++) {
-                if (working_memory[working_memory.size()][i].getTLU()lowestTimeUsed.getTLU()) {
-                    lowestTimeUsed.getTLU()working_memory[working_memory.size()][i].getTLU();
-                }
-            // TLU must be reset to 0 for this case. Put in replace or here?
-                if (disk_memory[current_page] == working_memory[working_memory.size()][i].getTLU() &&
-                i = num_frames-1) {
-                    working_memory[working_memory.size()][i].setTLU(0);
-                }
-            }
-            return lowestTimeUsed;
-        }
+        // else if (algorithm == "ARB") {
+        //     Page* scrambledBits, lowestTimeUsed;
+        //     // To begin, need to scramble each the history of each page TLU.
+        //     // A is the number of bits to shift
+        //     // B is length of time interval
+        //
+        //     // Scramble every interval of inB
+        //     if (current_page % inB == 0 && current_page != 0) {
+        //         for (int i = 0; i < num_frames; i++) {
+        //             scrambledBits = working_memory[working_memory.size()][i].getTLU();
+        //             // Right shift by inA bits.
+        //             // Update new value.
+        //             working_memory[working_memory.size()][i].getTLU() = scrambledBits;
+        //         }
+        //     }
+        //
+        //     // Otherwise find page to replace with least recently used
+        //     for (int i = 0; i < num_frames; i++) {
+        //         if (working_memory[working_memory.size()][i].getTLU()lowestTimeUsed.getTLU()) {
+        //             lowestTimeUsed.getTLU()working_memory[working_memory.size()][i].getTLU();
+        //         }
+        //     // TLU must be reset to 0 for this case. Put in replace or here?
+        //         if (disk_memory[current_page] == working_memory[working_memory.size()][i].getTLU() &&
+        //         i = num_frames-1) {
+        //             working_memory[working_memory.size()][i].setTLU(0);
+        //         }
+        //     }
+        //     return lowestTimeUsed;
+        // }
 
         // Working-Set Additional Reference Bit implementation
-        else if (algorithm == "WSARB") {
-            // Combines shifting the bits with the last one in ARB but additionally uses frequency counter to determine what is replaced
-            
-        }
+        // else if (algorithm == "WSARB") {
+        //     // Combines shifting the bits with the last one in ARB but additionally uses frequency counter to determine what is replaced
+        //
+        // }
     }
 
     // Replaces page in working with new page
-    bool replacePage(Page* prevPage, Page* newPage) {
-        // Replace based on position or value?
+    void replacePage(Page* prevPage, Page* newPage) {
+        std::vector<Page*> newTime (working_memory[working_memory.size()-1].begin(), working_memory[working_memory.size()-1].end());
+        for (int i = 0; i < num_frames; i++) {
+            if (newTime[i] == prevPage) {
+                newTime[i] = newPage;
+            }
+        }
+        working_memory.push_back(newTime);
     }
 
     // Prints the entire current map
@@ -143,6 +142,14 @@ public:
             std::cout << working_memory[working_memory.size()-1][i] << " ";
         }
         std::cout << std::endl;
+    }
+
+    void ageAll()
+    {
+        for (int i = 0; i < num_frames; i++)
+        {
+            working_memory[working_memory.size()-1][i]->increaseAge();
+        }
     }
 
     // Deconstructor
