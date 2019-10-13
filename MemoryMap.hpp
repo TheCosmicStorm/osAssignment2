@@ -25,6 +25,17 @@ public:
         working_memory.push_back(empty);
     }
 
+    //determines whether a page is in working_memory
+    bool findPage(Page* page) {
+        for (int j = 0; j < num_frames; j++) {
+            if (page == working_memory[working_memory.size()-1][j]) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
     //determines based on the algorithm, which page/frame gets replaced
     //has 4 unique applications
     Page* determinePageToReplace(std::string algorithm) {
@@ -76,6 +87,7 @@ public:
     bool replacePage(Page* prevPage, Page* newPage) {
 
     }
+
     // Prints the entire current map
     void printMap() {
         std::cout << "Current Map:" << std::endl;
