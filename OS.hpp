@@ -106,6 +106,25 @@ public:
             map.determinePageToReplace(algorithm);
         }
     }
+    
+    // Prints out the final input of the Paging System
+    void printPages() {
+        // First Line
+        std::cout << "events in trace:    ";
+        std::cout << addresses.size() << std::endl;
+        
+        // Second Line
+        std::cout << "total disk reads:   ";
+        std::cout << reads << std::endl;
+        
+        // Third Line
+        std::cout << "total disk writes:  ";
+        std::cout << writes << std::endl;
+        
+        // Fourth Line
+        std::cout << "page faults:        ";
+        std::cout << reads << std::endl;
+    }
 
     //Destructor
     ~OS() {
