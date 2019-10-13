@@ -20,6 +20,15 @@ private:
     int page_size;
     //current operation
     int time;
+    //number of reads
+    int reads;
+    //number of writes
+    int writes
+
+    //ARB and WSARB
+    int a;
+    int b;
+    int delta;
 
     // Converts n-bits hexadecimal numbers to base 10
     int hexConvert(std::string hexadecimal) {
@@ -42,9 +51,15 @@ private:
     }
 public:
     //Constructor
-    OS (int pageSize) {
+    //inA, inB, inDelta all = 0 if not ARB or WSARB
+    OS (int pageSize, int inA, int inB, int inDelta) {
         page_size = pageSize;
         time = 0;
+        reads = 0;
+        writes = 0;
+        a = inA;
+        b = inB;
+        delta = inDelta;
     }
 
     // Counts up the total number of pages that would be in disk_memory and then
@@ -84,7 +99,10 @@ public:
 
     void runOS(std::string algorithm)
     {
-
+        for (int i = 0; i < commands.size(); i++)
+        {
+            
+        }
     }
 
     //Destructor

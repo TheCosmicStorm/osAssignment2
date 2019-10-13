@@ -63,21 +63,18 @@ void checkArguments(int argc, char const *argv[]) {
     }
 
     //checks if page size is reasonable
-    int pageSize = stoi(argv[2]);
     if (pageSize < 1) {
         cout << "Page size is too small" << '\n';
         exit(1);
     }
 
     //checks if the number of frames is reasonable
-    int numFrames = stoi(argv[3]);
     if (pageSize < 1) {
         cout << "Number of frames is unreasonable" << '\n';
         exit(1);
     }
 
     //checks if the algorithm exist
-    string algorithm = argv[4]
     if (algorithm != "FIFO" || algorithm != "LRU" || algorithm != "ARB" || algorithm != "WSARB") {
         cout << "Algorithm does not exist" << '\n';
         exit(1);
@@ -89,7 +86,8 @@ void checkArguments(int argc, char const *argv[]) {
         exit(1);
     }
 
-    //checks arguments ARB
+    //checks arguments for Algorithm ARB
+    }
     if (algorithm == "ARB") {
         if (argc != 7) {
             cout << "Incorrect number of arguments for ARB" << '\n';
@@ -97,15 +95,42 @@ void checkArguments(int argc, char const *argv[]) {
         }
     }
 
-    //checks if there are too many arguments WSARB
-    if (algorithm == "WSARB" && argc != 8) {
-        cout << "Too many arguments for WSARB" << '\n';
-        exit(1);
+    //checks arguments for algorithm WSARB
+    if (algorithm == "WSARB") {
+        if (argc != 8)
+        {
+            cout << "Too many arguments for WSARB" << '\n';
+            exit(1);
+
+            int a = stoi(argv[5])
+            if (a < 1 || a > 8)
+            {
+                cout << "Invalid a" << '\n';
+                exit(1);
+            }
+
+            int b = stoi(argv[6])
+            if (b < 1 || b > 10)
+            {
+                cout << "Invalid b" << '\n';
+                exit(1);
+            }
+
+            int delta stoi(argv[7]);
+            if (b < 1 || b > 20)
+            {
+                cout << "Invalid delta" << '\n';
+                exit(1);
+            }
+        }
     }
 }
 
 int main(int argc, char const *argv[]) {
-    checkArguments(argc, argv);
+    int pageSize = stoi(argv[2]);
+    int numFrames = stoi(argv[3]);
+    string algorithm = argv[4];
+    checkArguments(argc, argv, );
 
 
     return 0;

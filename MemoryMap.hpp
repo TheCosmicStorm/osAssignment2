@@ -23,6 +23,38 @@ public:
         working_memory.push_back(empty);
     }
 
+    //determines based on the algorithm, which page/frame gets replaced
+    //has 4 unique applications
+    Page* determinePageToReplace(std::string algorithm) {
+        //First In, First Out implementation
+        if (algorithm == "FIFO")
+        {
+            /* code */
+        }
+
+        //Least Recently Used implementation
+        else if (algorithm == "LRU")
+        {
+            /* code */
+        }
+
+        //Additional Reference Bit implementation
+        else if (algorithm == "ARB")
+        {
+
+        }
+
+        //Working-Set Additional Reference Bit implementation
+        else if (algorithm == "WSARB")
+        {
+            /* code */
+        }
+    }
+
+    //replaces page in working with new page
+    bool replacePage(Page* prevPage, Page* newPage) {
+
+    }
     // Prints the entire current map
     void printMap() {
         std::cout << "Current Map:" << std::endl;

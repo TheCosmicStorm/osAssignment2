@@ -7,11 +7,13 @@
 class Page {
     int age; //time page has existed
     int tlu; //time last used
+    bool write;
 public:
     //Contructor
     Page() {
         age = 0;
         tlu = 0;
+        write = false;
     }
 
     //USEFUL FUNCTIONS
@@ -29,6 +31,16 @@ public:
     }
     int getTLU() {
         return tlu;
+    }
+
+    //write functions
+    void toBeWritten()
+    {
+        write = true;
+    }
+    void written()
+    {
+        write = false;
     }
 
     //Destructor
