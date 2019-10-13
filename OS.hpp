@@ -99,9 +99,14 @@ public:
 
     void runOS(std::string algorithm)
     {
+        MemoryMap map;
+        Page* incomingPage;
         for (int i = 0; i < commands.size(); i++)
         {
+            incomingPage = addresses[i]/pageSize;
             
+            map.determinePageToReplace(algorithm);
+
         }
     }
 
