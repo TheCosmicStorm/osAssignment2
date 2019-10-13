@@ -36,9 +36,12 @@ public:
     // Determines based on the algorithm, which page/frame gets replaced
     // Has 4 unique applications/ algorithms
     Page* determinePageToReplace(std::string algorithm) {
-        int current_page = // How is next page found/ updated;
+        int current_page = 0;// How is next page found/ updated
         // This value is used as an iterator
         // Needs the position of whatever page it is up to
+        
+        // Where is page value stored?
+        
         
         // If frame space quota not yet full; populate
         if (working_memory[working_memory.size()].size() < num_frames) {
