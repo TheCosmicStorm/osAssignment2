@@ -24,6 +24,9 @@ public:
     void resetAge() {
         age = 0;
     }
+    int getAge() {
+        return age;
+    }
 
     //time last used
     void setTLU(int newTime) {

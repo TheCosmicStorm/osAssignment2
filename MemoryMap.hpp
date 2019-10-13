@@ -14,6 +14,8 @@ private:
     std::vector<std::vector<Page*> > working_memory;
     //stores the allocated space passed into the program
     int num_frames;
+    int current_frame = 1;
+    int current_page = 0;
 public:
     //Constructor
     MemoryMap(int allocatedSpace) {
@@ -27,9 +29,26 @@ public:
     //has 4 unique applications
     Page* determinePageToReplace(std::string algorithm) {
         //First In, First Out implementation
-        if (algorithm == "FIFO")
-        {
-            /* code */
+        if (algorithm == "FIFO") {
+            Page* largestCurrAge;
+            
+            // If frame space quota not yet full; populate
+            if (working_memory[0].size() < num_frames) {
+                for (int i = 0; i < num_frames; i++) {
+                    working_memory[current_frame][i].push_back(disk_memory[current_page]);
+                }
+            }
+            
+            // Otherwise find page to replace with largest age, in the current frame
+            else {
+                for (int i = 0; i < num_frames; i++) {
+                    if (working_memory[current_frame][i].getAge() > largestCurrAge) {
+                        largestCurrAge.getAge() = working_memory[current_frame][i].getAge();
+                        // Return page position to replace?
+                    }
+                }
+            }
+            return largestCurrAge;
         }
 
         //Least Recently Used implementation
@@ -49,6 +68,8 @@ public:
         {
             /* code */
         }
+        current_frame++;
+        current_page++;
     }
 
     //replaces page in working with new page
