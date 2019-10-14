@@ -74,6 +74,14 @@ public:
                 
             }
         }
+        // FOR WILL:
+        // I need a string variable stored the same as age or TLU in Page call refBit.
+        // Every time a page is created this value should be initialised as (0 x the given 'a' input)
+        // So like if a was 7 = 0000000
+        // Finally I need a function that allows me to update this refBit every time that page is used
+        // Idk what it means by used but it gives the examples:
+        // If the shift register contains 00000000, for example, then the page has not been used for eight time periods. A page that is used at least once in each period has a shift register value of 11111111. A page with a history register value of 11000100 has been used more recently than one with a value of 01110111.
+        
         
         // Keep a-bit string for each page in memory each time it is used
         // Eg. 0000 has not been used yet.
