@@ -119,6 +119,7 @@ public:
         for (int i = 0; i < num_frames; i++) {
             if (newTime[i] == prevPage) {
                 newTime[i] = newPage;
+                break;
             }
         }
         working_memory.push_back(newTime);
@@ -129,7 +130,12 @@ public:
         std::cout << "Current Map:" << std::endl;
         for (int i = 0; i < working_memory.size(); i++) {
             for (int j = 0; j < num_frames; j++) {
-                std::cout << working_memory[i][j] << " ";
+                if (working_memory[i][j] == nullptr) {
+                    std::cout << "-1" << ' ';
+                }
+                else {
+                    std::cout << working_memory[i][j]->getPageNum() << " ";
+                }
             }
         std::cout << std::endl;
         }
@@ -137,9 +143,13 @@ public:
 
     // Prints the current maps last unit
     void printCurrent() {
-        std::cout << "Current Time:" << std::endl;
         for (int i = 0; i < num_frames; i++) {
-            std::cout << working_memory[working_memory.size()-1][i] << " ";
+            if (working_memory[working_memory.size()-1][i] == nullptr) {
+                std::cout << "-1" << ' ';
+            }
+            else {
+                std::cout << working_memory[working_memory.size()-1][i]->getPageNum() << " ";
+            }
         }
         std::cout << std::endl;
     }

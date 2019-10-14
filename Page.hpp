@@ -7,13 +7,15 @@
 class Page {
     int age; //time page has existed
     int tlu; //time last used
-    bool write;
+    bool write; //flag for whether the page need to be written to memory
+    int page_number; //stores page number for printing
 public:
     //Contructor
-    Page() {
+    Page(int pageNum) {
         age = 0;
         tlu = 0;
         write = false;
+        page_number = pageNum;
     }
 
     //USEFUL FUNCTIONS
@@ -47,8 +49,15 @@ public:
         write = false;
     }
 
+    //returns the page number (only in DEBUG)
+    int getPageNum() {
+        return page_number;
+    }
+
     //Destructor
-    ~Page();
+    ~Page() {
+
+    }
 };
 
 #endif

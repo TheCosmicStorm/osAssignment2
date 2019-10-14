@@ -46,13 +46,16 @@ vector<pair<char,string>> processInput(vector<string> input) {
         ss << input.at(i);
         ss >> command;
         ss >> address;
+        std::cout << command << ' ';
+        std::cout << address << '\n';
         temp = make_pair(command,address);
         traces.push_back(temp);
     }
+    std::cout << traces.size() << '\n';
     return traces;
 }
 
-void checkArguments(int argc, char const *argv[]) {
+void checkArguments(int argc, char const *argv[], int pageSize, int numFrames, std::string algorithm) {
     // Checks for too few arguments
     if (argc < 5) {
         cout << "Too few arguments given." << '\n';
@@ -66,13 +69,14 @@ void checkArguments(int argc, char const *argv[]) {
     }
 
     // Checks if the number of frames is reasonable
-    if (pageSize < 1) {
+    if (numFrames < 1) {
         cout << "Number of frames is unreasonable." << '\n';
         exit(1);
     }
 
     // Checks if the algorithm exist
-    if (algorithm != "FIFO" || algorithm != "LRU" || algorithm != "ARB" || algorithm != "WSARB") {
+    if (algorithm != "FIFO" && algorithm != "LRU" && algorithm != "ARB" && algorithm != "WSARB") {
+        cout << algorithm << '\n';
         cout << "Algorithm does not exist." << '\n';
         exit(1);
     }
@@ -84,10 +88,21 @@ void checkArguments(int argc, char const *argv[]) {
     }
 
     // Checks arguments for Algorithm ARB
-    }
     if (algorithm == "ARB") {
         if (argc != 7) {
             cout << "Incorrect number of arguments for ARB." << '\n';
+            exit(1);
+        }
+
+        int a = stoi(argv[5]);
+        if (a < 1 || a > 8) {
+            cout << "Invalid a." << '\n';
+            exit(1);
+        }
+
+        int b = stoi(argv[6]);
+        if (b < 1 || b > 10) {
+            cout << "Invalid b." << '\n';
             exit(1);
         }
     }
@@ -98,21 +113,21 @@ void checkArguments(int argc, char const *argv[]) {
             cout << "Too many arguments for WSARB." << '\n';
             exit(1);
 
-            int a = stoi(argv[5])
+            int a = stoi(argv[5]);
             if (a < 1 || a > 8) {
                 cout << "Invalid a." << '\n';
                 exit(1);
             }
 
-            int b = stoi(argv[6])
+            int b = stoi(argv[6]);
             if (b < 1 || b > 10) {
                 cout << "Invalid b." << '\n';
                 exit(1);
             }
 
-            int delta stoi(argv[7]);
+            int delta = stoi(argv[7]);
             if (b < 1 || b > 20) {
-                cout << "Invalid ∆." << '\n';
+                cout << "Invalid delta" << '\n';
                 exit(1);
             }
         }
@@ -123,6 +138,18 @@ int main(int argc, char const *argv[]) {
     int pageSize = stoi(argv[2]);
     int numFrames = stoi(argv[3]);
     string algorithm = argv[4];
-    checkArguments(argc, argv, );
+    checkArguments(argc, argv, pageSize, numFrames, algorithm);
+    OS os (pageSize);
+    if (argc == 7) {
+        os.ARB(stoi(argv[5]), stoi(argv[6]));
+    }
+    else if (argc == 8) {
+        os.WSARB(stoi(argv[5]), stoi(argv[6]), stoi(argv[7]));
+    }
+    vector<string> inputLines = fileReader(argv[1]);
+    vector<pair<char,string>> traces = processInput(inputLines);
+    os.initialiseOS(traces);
+    os.runOS(algorithm, numFrames);
+    os.printPages();
     return 0;
 }
