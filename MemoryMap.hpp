@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <cstddef>
+#include <bitset>
 
 class MemoryMap {
 private:
@@ -33,11 +34,62 @@ public:
         }
         return false;
     }
+    
+    // Algorithm for FIFO
+    Page* algorithmFIFO() {
+        Page* largestCurrAge = working_memory[working_memory.size()-1][0];
 
-    // Determines based on the algorithm, which page/frame gets replaced
-    // Has 4 unique applications/ algorithms
-    Page* determinePageToReplace(std::string algorithm) {
+        // Find page to replace with largest age, in the current frame
+        for (int j = 1; j < num_frames; j++) {
+            if (working_memory[working_memory.size()-1][j]->getAge() > largestCurrAge->getAge()) {
+                largestCurrAge = working_memory[working_memory.size()-1][j];
+            }
+        }
+        return largestCurrAge;
+    }
+    
+    // Algorithm for LRU
+    Page* algorithmLRU() {
+        Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
+        // TLU = time last used
+        // Find page to replace with least recently used
+        for (int j = 1; j < num_frames; j++) {
+            if (working_memory[working_memory.size()-1][j]->getTLU() < leastRecentlyUsed->getTLU()) {
+                leastRecentlyUsed = working_memory[working_memory.size()-1][j];
+            }
+            else if (working_memory[working_memory.size()-1][j]->getTLU() == leastRecentlyUsed->getTLU()){
+                if (working_memory[working_memory.size()-1][j]->getAge() > leastRecentlyUsed->getAge()) {
+                    leastRecentlyUsed = working_memory[working_memory.size()-1][j];
+                }
+            }
+        }
+        return leastRecentlyUsed;
+    }
+    
+    void scrambledBits(int interval) {
+        // If current frame is on the interval and not at the start
+        if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {
+            // Shift all reference bits by inA
+            for (int j = 0; j < num_frames; j++) {
+                
+            }
+        }
+        
+        // Keep a-bit string for each page in memory each time it is used
+        // Eg. 0000 has not been used yet.
+        //     0110 has been used twice so far.
+        //     1000 was most recently used
+        // At interval, OS shifts all reference bits for each page by 1 right
+        // Conversion part:
+        // Therefore, the conversion of this 8bit number is its TLU
+        // Update TLU after interval and run LRU
+        
+    }
+    
+    // Determines based on the 4 algorithms, which page/frame gets replaced
+    Page* determinePageToReplace(std::string algorithm, int b) {
 
+        // For empty working_memory
         for (int j = 0; j < num_frames; j++) {
             if (working_memory[working_memory.size()-1][j] == nullptr) {
                 return nullptr;
@@ -45,74 +97,27 @@ public:
         }
         //First In, First Out implementation
         if (algorithm == "FIFO") {
-            Page* largestCurrAge = working_memory[working_memory.size()-1][0];
-
-            // Find page to replace with largest age, in the current frame
-            for (int j = 1; j < num_frames; j++) {
-                if (working_memory[working_memory.size()-1][j]->getAge() > largestCurrAge->getAge()) {
-                    largestCurrAge = working_memory[working_memory.size()-1][j];
-                }
-            }
-
-            return largestCurrAge;
+            return algorithmFIFO();
         }
-
         // Least Recently Used implementation
         else if (algorithm == "LRU") {
-            Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
-            //TLU = time last used
-            // Find page to replace with least recently used
-            for (int j = 1; j < num_frames; j++) {
-                if (working_memory[working_memory.size()-1][j]->getTLU() < leastRecentlyUsed->getTLU()) {
-                    leastRecentlyUsed = working_memory[working_memory.size()-1][j];
-                }
-                else if (working_memory[working_memory.size()-1][j]->getTLU() == leastRecentlyUsed->getTLU()){
-                    if (working_memory[working_memory.size()-1][j]->getAge() > leastRecentlyUsed->getAge()) {
-                        leastRecentlyUsed = working_memory[working_memory.size()-1][j];
-                    }
-                }
-            }
-            return leastRecentlyUsed;
+            return algorithmLRU();
         }
-
         // Additional Reference Bit implementation
-        // else if (algorithm == "ARB") {
-        //     Page* scrambledBits, lowestTimeUsed;
-        //     // To begin, need to scramble each the history of each page TLU.
-        //     // A is the number of bits to shift
-        //     // B is length of time interval
-        //
-        //     // Scramble every interval of inB
-        //     if (current_page % inB == 0 && current_page != 0) {
-        //         for (int i = 0; i < num_frames; i++) {
-        //             scrambledBits = working_memory[working_memory.size()][i].getTLU();
-        //             // Right shift by inA bits.
-        //             // Update new value.
-        //             working_memory[working_memory.size()][i].getTLU() = scrambledBits;
-        //         }
-        //     }
-        //
-        //     // Otherwise find page to replace with least recently used
-        //     for (int i = 0; i < num_frames; i++) {
-        //         if (working_memory[working_memory.size()][i].getTLU()lowestTimeUsed.getTLU()) {
-        //             lowestTimeUsed.getTLU()working_memory[working_memory.size()][i].getTLU();
-        //         }
-        //     // TLU must be reset to 0 for this case. Put in replace or here?
-        //         if (disk_memory[current_page] == working_memory[working_memory.size()][i].getTLU() &&
-        //         i = num_frames-1) {
-        //             working_memory[working_memory.size()][i].setTLU(0);
-        //         }
-        //     }
-        //     return lowestTimeUsed;
-        // }
-
-        // Working-Set Additional Reference Bit implementation
-        // else if (algorithm == "WSARB") {
-        //     // Combines shifting the bits with the last one in ARB but additionally uses frequency counter to determine what is replaced
-        //
-        // }
+        else if (algorithm == "ARB") {
+            scrambledBits(b);
+            return algorithmLRU();
+         }
+         //Working-Set Additional Reference Bit implementation
+         else if (algorithm == "WSARB") {
+             // Combines shifting the bits with the last one in ARB
+             // Additionally uses frequency counter to determine what is replaced
+             return algorithmLRU();
+         }
+        // Just to remove non-void return type warning
+        return nullptr;
     }
-
+    
     // Replaces page in working with new page
     void replacePage(Page* prevPage, Page* newPage) {
         std::vector<Page*> newTime (working_memory[working_memory.size()-1].begin(), working_memory[working_memory.size()-1].end());
@@ -153,13 +158,11 @@ public:
         }
         std::cout << std::endl;
     }
-
-    void ageAll()
-    {
-        for (int i = 0; i < num_frames; i++)
-        {
-            if (working_memory[working_memory.size()-1][i] != nullptr)
-            {
+    
+    // Increases age of all in working memory
+    void ageAll() {
+        for (int i = 0; i < num_frames; i++) {
+            if (working_memory[working_memory.size()-1][i] != nullptr) {
                 working_memory[working_memory.size()-1][i]->increaseAge();
             }
         }
@@ -171,3 +174,25 @@ public:
 };
 
 #endif
+
+
+
+/*
+ Old method
+ 
+ void scrambledBits(int shift, int interval) {
+     // If current frame is on the interval and not at the start
+     if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {
+         // Shift all reference bits by inA
+         for (int j = 0; j < num_frames; j++) {
+             int scrambledBits = working_memory[working_memory.size()-1][j]->getTLU();
+             // Converts integer to 8bit binary
+             std::bitset<8> bin_x(scrambledBits);
+             // Shifts bits by 'shift' amount
+             int upd = scrambledBits << shift;
+             // Updates values
+             working_memory[working_memory.size()-1][j]->setTLU(upd);
+         }
+     }
+ }
+ */

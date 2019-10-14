@@ -7,6 +7,7 @@
 class Page {
     int age; //time page has existed
     int tlu; //time last used
+    std::string refBit; //history of past 8 cycles
     bool write; //flag for whether the page need to be written to memory
     int page_number; //stores page number for printing
 public:
@@ -14,6 +15,8 @@ public:
     Page(int pageNum) {
         age = 0;
         tlu = 0;
+        refBit = "";
+        
         write = false;
         page_number = pageNum;
     }
@@ -36,6 +39,18 @@ public:
     }
     int getTLU() {
         return tlu;
+    }
+    
+    // Reference Bit
+    void ageBit(bool sel) {
+        refBit.insert(refBit.begin(),sel);
+        refBit.erase(refBit.end());
+    }
+    std::string getBit() {
+        return refBit;
+    }
+    void setBit(std::string newBit) {
+        refBit = newBit;
     }
 
     // Write functions

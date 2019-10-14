@@ -46,12 +46,12 @@ vector<pair<char,string>> processInput(vector<string> input) {
         ss << input.at(i);
         ss >> command;
         ss >> address;
-        std::cout << command << ' ';
-        std::cout << address << '\n';
+//        std::cout << command << ' ';
+//        std::cout << address << '\n';
         temp = make_pair(command,address);
         traces.push_back(temp);
     }
-    std::cout << traces.size() << '\n';
+//    std::cout << traces.size() << '\n';
     return traces;
 }
 
