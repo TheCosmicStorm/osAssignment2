@@ -128,7 +128,8 @@ public:
 
             //checks if page is currently in frames/working memory
             if (!map.findPage(incomingPage)) {
-                std::cout << "MISS: " << ' ';
+                //DEBUG
+                // std::cout << "MISS: " << ' ';
                 reads++;
 
                 //determines the page to replace based on the algorithm
