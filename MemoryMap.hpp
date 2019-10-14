@@ -75,9 +75,7 @@ public:
             }
         }
         // FOR WILL:
-        // I need a string variable stored the same as age or TLU in Page call refBit.
-        // Every time a page is created this value should be initialised as (0 x the given 'a' input)
-        // So like if a was 7 = 0000000
+        
         // Finally I need a function that allows me to update this refBit every time that page is used
         // Idk what it means by used but it gives the examples:
         // If the shift register contains 00000000, for example, then the page has not been used for eight time periods. A page that is used at least once in each period has a shift register value of 11111111. A page with a history register value of 11000100 has been used more recently than one with a value of 01110111.
@@ -96,9 +94,12 @@ public:
     
     // Determines based on the 4 algorithms, which page/frame gets replaced
     Page* determinePageToReplace(std::string algorithm, int b) {
-
+        // Whatevers in that current frame add 1, everything else add 0
+        
+        
         // For empty working_memory
         for (int j = 0; j < num_frames; j++) {
+            working_memory[working_memory.size()-1][j] -> ageBit(1);
             if (working_memory[working_memory.size()-1][j] == nullptr) {
                 return nullptr;
             }
@@ -175,7 +176,7 @@ public:
             }
         }
     }
-
+    
     // Deconstructor
     ~MemoryMap() {
     }

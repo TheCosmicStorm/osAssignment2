@@ -24,8 +24,6 @@ private:
     int reads;
     //number of writes
     int writes;
-    //ref bit length
-    std::string bitDef;
 
     //ARB and WSARB
     int a;
@@ -106,10 +104,12 @@ public:
             disk_memory.push_back(temp);
         }
         
+        // Sets Bit to intialise length
+        std::string tmpBit;
         for (int i = 0; i <= a; i++) {
-            bitDef += "0";
+            tmpBit += "0";
         }
-        
+        disk_memory[disk_memory.size()-1] -> setBit(tmpBit);
     }
 
     //Runs the page replacement simulator
@@ -140,7 +140,16 @@ public:
 
                 //determines the page to replace based on the algorithm
                 pageToReplace = map.determinePageToReplace(algorithm, b);
-
+                
+                // If page was not found in previous frame, age by 0
+                for (int j = 0; j < numFrames; j++) {
+                    std::string tmp = disk_memory[disk_memory.size()-1][j].getBit();
+                    if (tmp[0] != '1') {
+                        disk_memory[disk_memory.size()-1][j].ageBit(0);
+                    }
+                }
+                
+                
                 //replaces page, ensuring that any necessay parameters are reset
                 map.replacePage(pageToReplace,incomingPage);
                 if (pageToReplace != nullptr) {
