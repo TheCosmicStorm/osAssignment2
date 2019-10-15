@@ -66,43 +66,54 @@ public:
         return leastRecentlyUsed;
     }
 
+    Page* algorithmARB() {
+        Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
+        int testRefBit;
+        std::vector<Page*> sameARB;
+        // Find page to replace with smallest ARB
+        for (int j = 1; j < num_frames; j++) {
+            testRefBit = working_memory[working_memory.size()-1][j]->integerARB();
+            if (testRefBit < leastRecentlyUsed->integerARB()) {
+                leastRecentlyUsed = working_memory[working_memory.size()-1][j];
+                if (!sameARB.empty()) {
+                    sameARB.clear();
+                }
+            }
+            else if (testRefBit == leastRecentlyUsed->integerARB()){
+                sameARB.push_back(leastRecentlyUsed);
+                leastRecentlyUsed = working_memory[working_memory.size()-1][j];
+            }
+        }
+
+        //FIFO if there are multiple of the smallest
+        for (int i = 0; i < sameARB.size(); i++) {
+            // std::cout << "Comparison" << '\n';
+            // std::cout << leastRecentlyUsed->getPageNum() << ": " << leastRecentlyUsed->getAge() << '\n';
+            // std::cout << sameARB[i]->getPageNum() << ": " << sameARB[i]->getAge() << '\n';;
+            if (sameARB[i]->getAge() > leastRecentlyUsed->getAge()) {
+                leastRecentlyUsed = sameARB[i];
+            }
+        }
+
+        return leastRecentlyUsed;
+    }
+
     //At predetermined intervals it will perform a right bitShift for all page
-    // ARBs in memory
-    void intervalShift(Page* incomingPage) {
+    // ARBs in memoryincomingPage
+    void intervalShift() {
         //For ARB/WSARB and at interval, for used page => bitShift 1, else bit shift 0
         for (int j = 0; j < num_frames; j++) {
             if (working_memory[working_memory.size()-1][j] == nullptr) {
                 continue;
             }
-            else if (working_memory[working_memory.size()-1][j] == incomingPage){
-                working_memory[working_memory.size()-1][j]->shiftRBit("1");
-            }
             else {
                 working_memory[working_memory.size()-1][j]->shiftRBit("0");
             }
         }
-        // FOR WILL:
-
-        // Finally I need a function that allows me to update this refBit every time that page is used
-        // Idk what it means by used but it gives the examples:
-        // If the shift register contains 00000000, for example, then the page has not been used for eight time periods. A page that is used at least once in each period has a shift register value of 11111111. A page with a history register value of 11000100 has been used more recently than one with a value of 01110111.
-
-
-        // Keep a-bit string for each page in memory each time it is used
-        // Eg. 0000 has not been used yet.
-        //     0110 has been used twice so far.
-        //     1000 was most recently used
-        // At interval, OS shifts all reference bits for each page by 1 right
-        // Conversion part:
-        // Therefore, the conversion of this 8bit number is its TLU
-        // Update TLU after interval and run LRU
-
     }
 
     // Determines based on the 4 algorithms, which page/frame gets replaced
     Page* determinePageToReplace(std::string algorithm) {
-        // Whatevers in that current frame add 1, everything else add 0
-
 
         // For empty working_memory
         for (int j = 0; j < num_frames; j++) {
@@ -120,7 +131,7 @@ public:
         }
         // Additional Reference Bit implementation
         else if (algorithm == "ARB") {
-            return algorithmLRU();
+            return algorithmARB();
          }
          //Working-Set Additional Reference Bit implementation
          else if (algorithm == "WSARB") {
@@ -201,25 +212,3 @@ public:
 };
 
 #endif
-
-
-
-/*
- Old method
-
- void scrambledBits(int shift, int interval) {
-     // If current frame is on the interval and not at the start
-     if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {
-         // Shift all reference bits by inA
-         for (int j = 0; j < num_frames; j++) {
-             int scrambledBits = working_memory[working_memory.size()-1][j]->getTLU();
-             // Converts integer to 8bit binary
-             std::bitset<8> bin_x(scrambledBits);
-             // Shifts bits by 'shift' amount
-             int upd = scrambledBits << shift;
-             // Updates values
-             working_memory[working_memory.size()-1][j]->setTLU(upd);
-         }
-     }
- }
- */

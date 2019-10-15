@@ -148,9 +148,7 @@ int main(int argc, char const *argv[]) {
     }
     vector<string> inputLines = fileReader(argv[1]);
     vector<pair<char,string>> traces = processInput(inputLines);
-    std::cout << "try1" << '\n';
     os.initialiseOS(traces);
-    std::cout << "try2" << '\n';
     os.runOS(algorithm, numFrames);
     os.printPages();
     return 0;

@@ -4,6 +4,8 @@
 #ifndef PAGE_H
 #define PAGE_H
 
+#include <cmath>
+
 class Page {
     int age; //time page has existed
     int tlu; //time last used
@@ -46,8 +48,20 @@ public:
         refBit = sel + refBit;
         refBit.pop_back();
     }
+    void used() {
+        refBit[0] = '1';
+    }
     std::string getBit() {
         return refBit;
+    }
+    int integerARB() {
+        int intEquiv = 0;
+        for (int i = 0; i < refBit.length(); i++) {
+            if (refBit[i] == '1') {
+                intEquiv += pow(2,refBit.length()-i-1);
+            }
+        }
+        return intEquiv;
     }
     void setBit(std::string newBit) {
         refBit = newBit;
