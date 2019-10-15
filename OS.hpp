@@ -97,19 +97,19 @@ public:
             }
         }
 
+        // Sets Bit to intialise length
+        std::string tmpBit;
+        for (int i = 0; i < a; i++) {
+            tmpBit += "0";
+        }
+
         // Fills the disk memory with largest page number + 1 pages
         Page* temp;
         for (int i = 0; i < largest+1; i++) {
             temp = new Page (i);
             disk_memory.push_back(temp);
+            disk_memory[i]->setBit(tmpBit);
         }
-
-        // Sets Bit to intialise length
-        std::string tmpBit;
-        for (int i = 0; i <= a; i++) {
-            tmpBit += "0";
-        }
-        disk_memory[disk_memory.size()-1] -> setBit(tmpBit);
     }
 
     //Runs the page replacement simulator
@@ -142,14 +142,9 @@ public:
                 //determines the page to replace based on the algorithm
                 pageToReplace = map.determinePageToReplace(algorithm, b);
 
-                // If page was not found in previous frame, age by 0
-                for (int j = 0; j < numFrames; j++) {
-                    std::string tmp = disk_memory[disk_memory.size()-1][j].getBit();
-                    if (tmp[0] != '1') {
-                        disk_memory[disk_memory.size()-1][j].ageBit(0);
-                    }
+                if (algorithm == "ARB" || algorithm == "WSARB" && time%b != 0){
+                    incomingPage->shiftRBit(1);
                 }
-
 
                 //replaces page, ensuring that any necessay parameters are reset
                 map.replacePage(pageToReplace,incomingPage);
@@ -161,17 +156,41 @@ public:
                     }
                 }
             }
-            //DEBUG
+
             else {
+                if (algorithm == "ARB" || algorithm == "WSARB") {
+                    map.printCurrentWithARB(a);
+                }
                 std::cout << "HIT:  " << ' ';
             }
+
+            //DEBUG
             std::cout << "frames:" << ' ';
-            map.printCurrent();
+            if (algorithm == "ARB" || algorithm == "WSARB") {
+                map.printCurrentWithARB(a);
+            }
+            else {
+                map.printCurrent();
+            }
+
 
             //sets the time last used and ages all pages in memory
             incomingPage->setTLU(time);
             map.ageAll();
-        }
+            //For ARB/WSARB and at interval, for used page => bitShift 1, else bit shift 0
+            if (algorithm == "ARB" || algorithm == "WSARB" && time%b == 0) {
+                for (int j = 0; j < numFrames; j++) {
+                    if (disk_memory[disk_memory.size()-1][j] == nullptr) {
+                        continue;
+                    }
+                    else if (disk_memory[disk_memory.size()-1][j] == incomingPage){
+                        disk_memory[disk_memory.size()-1][j].shiftRBit(1);
+                    }
+                    else{
+                        disk_memory[disk_memory.size()-1][j].shiftRBit(0);
+                    }
+                }
+            }
     }
 
     // Prints out the final input of the Paging System

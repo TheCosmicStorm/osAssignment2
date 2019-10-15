@@ -16,7 +16,7 @@ public:
         age = 0;
         tlu = 0;
         refBit = "";
-        
+
         write = false;
         page_number = pageNum;
     }
@@ -40,9 +40,9 @@ public:
     int getTLU() {
         return tlu;
     }
-    
+
     // Reference Bit
-    void ageBit(bool sel) {
+    void shiftRBit(bool sel) {
         refBit.insert(refBit.begin(),sel);
         refBit.erase(refBit.end());
     }

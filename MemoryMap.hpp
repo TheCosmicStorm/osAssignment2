@@ -99,7 +99,6 @@ public:
 
         // For empty working_memory
         for (int j = 0; j < num_frames; j++) {
-            working_memory[working_memory.size()-1][j] -> ageBit(1);
             if (working_memory[working_memory.size()-1][j] == nullptr) {
                 return nullptr;
             }
@@ -163,6 +162,20 @@ public:
             }
             else {
                 std::cout << working_memory[working_memory.size()-1][i]->getPageNum() << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+
+    void printCurrentWithARB(int a) {
+        std::string emptyARB ('0',a);
+        for (int i = 0; i < num_frames; i++) {
+            if (working_memory[working_memory.size()-1][i] == nullptr) {
+                std::cout << "-1(" << emptyARB << ") ";
+            }
+            else {
+                std::cout << working_memory[working_memory.size()-1][i]->getPageNum();
+                std::cout << '(' << working_memory[working_memory.size()-1][i]->getBit() <<") ";
             }
         }
         std::cout << std::endl;
