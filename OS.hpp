@@ -29,6 +29,7 @@ private:
     int a;
     int b;
     int delta;
+    std::string empty_ARB;
 
     // Converts n-bits hexadecimal numbers to base 10
     int hexConvert(std::string hexadecimal) {
@@ -98,9 +99,8 @@ public:
         }
 
         // Sets Bit to intialise length
-        std::string tmpBit;
         for (int i = 0; i < a; i++) {
-            tmpBit += "0";
+            empty_ARB += "0";
         }
 
         // Fills the disk memory with largest page number + 1 pages
@@ -108,7 +108,7 @@ public:
         for (int i = 0; i < largest+1; i++) {
             temp = new Page (i);
             disk_memory.push_back(temp);
-            disk_memory[i]->setBit(tmpBit);
+            disk_memory[i]->setBit(empty_ARB);
         }
     }
 
@@ -118,15 +118,16 @@ public:
         int pageNumber;
         Page* incomingPage;
         Page* pageToReplace;
-        //runs through all the traces simulating the page replacement
+        //runs through all the traces simulating the page replacement algorithm
         for (int i = 0; i < commands.size(); i++) {
+
             time++;
+            pageNumber = addresses[i]/page_size;
+            incomingPage = disk_memory[pageNumber];
+
             //DEBUG
             std::cout << "Time: " << time << ' ';
-            pageNumber = addresses[i]/page_size;
-            //DEBUG
             std::cout << "Page: "<< pageNumber << ' ';
-            incomingPage = disk_memory[pageNumber];
 
             //checks if the page will need to be written to disk if it is removed
             if (commands[i] == 'W') {
@@ -137,37 +138,44 @@ public:
             if (!map.findPage(incomingPage)) {
                 //DEBUG
                 std::cout << "MISS: " << ' ';
+
+                //If page is not in working memory it must be read from the disk
                 reads++;
 
                 //determines the page to replace based on the algorithm
-                pageToReplace = map.determinePageToReplace(algorithm, b);
+                pageToReplace = map.determinePageToReplace(algorithm);
 
+                //Checks to see if the current time is in the middle of a
+                // bit shift interval. If so it will shift the incomingPage
                 if (algorithm == "ARB" || algorithm == "WSARB" && time%b != 0){
-                    incomingPage->shiftRBit(1);
+                    incomingPage->shiftRBit("1");
                 }
 
                 //replaces page, ensuring that any necessay parameters are reset
                 map.replacePage(pageToReplace,incomingPage);
                 if (pageToReplace != nullptr) {
                     pageToReplace->resetAge();
+
+                    //checks if the page needs to be written to the disk
                     if (pageToReplace->needsToBeWritten()) {
                         writes++;
                         pageToReplace->written();
                     }
+
+                    if (algorithm == "ARB" || algorithm == "WSARB") {
+                        incomingPage->shiftRBit("1");
+                    }
                 }
             }
-
+            //DEBUG
             else {
-                if (algorithm == "ARB" || algorithm == "WSARB") {
-                    map.printCurrentWithARB(a);
-                }
                 std::cout << "HIT:  " << ' ';
             }
 
             //DEBUG
             std::cout << "frames:" << ' ';
             if (algorithm == "ARB" || algorithm == "WSARB") {
-                map.printCurrentWithARB(a);
+                map.printCurrentWithARB(empty_ARB);
             }
             else {
                 map.printCurrent();
@@ -177,20 +185,12 @@ public:
             //sets the time last used and ages all pages in memory
             incomingPage->setTLU(time);
             map.ageAll();
-            //For ARB/WSARB and at interval, for used page => bitShift 1, else bit shift 0
-            if (algorithm == "ARB" || algorithm == "WSARB" && time%b == 0) {
-                for (int j = 0; j < numFrames; j++) {
-                    if (disk_memory[disk_memory.size()-1][j] == nullptr) {
-                        continue;
-                    }
-                    else if (disk_memory[disk_memory.size()-1][j] == incomingPage){
-                        disk_memory[disk_memory.size()-1][j].shiftRBit(1);
-                    }
-                    else{
-                        disk_memory[disk_memory.size()-1][j].shiftRBit(0);
-                    }
-                }
+
+            //If at the begining of an interval, run intervalShift
+            if (algorithm == "ARB" || algorithm == "WSARB" && time % b == 0) {
+                map.intervalShift(incomingPage);
             }
+        }
     }
 
     // Prints out the final input of the Paging System

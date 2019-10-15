@@ -42,9 +42,9 @@ public:
     }
 
     // Reference Bit
-    void shiftRBit(bool sel) {
-        refBit.insert(refBit.begin(),sel);
-        refBit.erase(refBit.end());
+    void shiftRBit(std::string sel) {
+        refBit = sel + refBit;
+        refBit.pop_back();
     }
     std::string getBit() {
         return refBit;

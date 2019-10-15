@@ -55,7 +55,7 @@ vector<pair<char,string>> processInput(vector<string> input) {
     return traces;
 }
 
-void checkArguments(int argc, char const *argv[], int pageSize, int numFrames, std::string algorithm) {
+void checkArguments(int argc, char const *argv[], int pageSize, int numFrames, string algorithm) {
     // Checks for too few arguments
     if (argc < 5) {
         cout << "Too few arguments given." << '\n';
@@ -148,7 +148,9 @@ int main(int argc, char const *argv[]) {
     }
     vector<string> inputLines = fileReader(argv[1]);
     vector<pair<char,string>> traces = processInput(inputLines);
+    std::cout << "try1" << '\n';
     os.initialiseOS(traces);
+    std::cout << "try2" << '\n';
     os.runOS(algorithm, numFrames);
     os.printPages();
     return 0;

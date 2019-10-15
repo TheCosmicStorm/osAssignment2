@@ -66,12 +66,19 @@ public:
         return leastRecentlyUsed;
     }
 
-    void scrambledBits(int interval) {
-        // If current frame is on the interval and not at the start
-        if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {
-            // Shift all reference bits by inA
-            for (int j = 0; j < num_frames; j++) {
-
+    //At predetermined intervals it will perform a right bitShift for all page
+    // ARBs in memory
+    void intervalShift(Page* incomingPage) {
+        //For ARB/WSARB and at interval, for used page => bitShift 1, else bit shift 0
+        for (int j = 0; j < num_frames; j++) {
+            if (working_memory[working_memory.size()-1][j] == nullptr) {
+                continue;
+            }
+            else if (working_memory[working_memory.size()-1][j] == incomingPage){
+                working_memory[working_memory.size()-1][j]->shiftRBit("1");
+            }
+            else {
+                working_memory[working_memory.size()-1][j]->shiftRBit("0");
             }
         }
         // FOR WILL:
@@ -93,7 +100,7 @@ public:
     }
 
     // Determines based on the 4 algorithms, which page/frame gets replaced
-    Page* determinePageToReplace(std::string algorithm, int b) {
+    Page* determinePageToReplace(std::string algorithm) {
         // Whatevers in that current frame add 1, everything else add 0
 
 
@@ -113,7 +120,6 @@ public:
         }
         // Additional Reference Bit implementation
         else if (algorithm == "ARB") {
-            scrambledBits(b);
             return algorithmLRU();
          }
          //Working-Set Additional Reference Bit implementation
@@ -167,8 +173,7 @@ public:
         std::cout << std::endl;
     }
 
-    void printCurrentWithARB(int a) {
-        std::string emptyARB ('0',a);
+    void printCurrentWithARB(std::string emptyARB) {
         for (int i = 0; i < num_frames; i++) {
             if (working_memory[working_memory.size()-1][i] == nullptr) {
                 std::cout << "-1(" << emptyARB << ") ";
