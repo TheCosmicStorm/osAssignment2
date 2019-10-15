@@ -34,7 +34,7 @@ public:
         }
         return false;
     }
-    
+
     // Algorithm for FIFO
     Page* algorithmFIFO() {
         Page* largestCurrAge = working_memory[working_memory.size()-1][0];
@@ -47,7 +47,7 @@ public:
         }
         return largestCurrAge;
     }
-    
+
     // Algorithm for LRU
     Page* algorithmLRU() {
         Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
@@ -65,22 +65,22 @@ public:
         }
         return leastRecentlyUsed;
     }
-    
+
     void scrambledBits(int interval) {
         // If current frame is on the interval and not at the start
         if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {
             // Shift all reference bits by inA
             for (int j = 0; j < num_frames; j++) {
-                
+
             }
         }
         // FOR WILL:
-        
+
         // Finally I need a function that allows me to update this refBit every time that page is used
         // Idk what it means by used but it gives the examples:
         // If the shift register contains 00000000, for example, then the page has not been used for eight time periods. A page that is used at least once in each period has a shift register value of 11111111. A page with a history register value of 11000100 has been used more recently than one with a value of 01110111.
-        
-        
+
+
         // Keep a-bit string for each page in memory each time it is used
         // Eg. 0000 has not been used yet.
         //     0110 has been used twice so far.
@@ -89,14 +89,14 @@ public:
         // Conversion part:
         // Therefore, the conversion of this 8bit number is its TLU
         // Update TLU after interval and run LRU
-        
+
     }
-    
+
     // Determines based on the 4 algorithms, which page/frame gets replaced
     Page* determinePageToReplace(std::string algorithm, int b) {
         // Whatevers in that current frame add 1, everything else add 0
-        
-        
+
+
         // For empty working_memory
         for (int j = 0; j < num_frames; j++) {
             working_memory[working_memory.size()-1][j] -> ageBit(1);
@@ -126,7 +126,7 @@ public:
         // Just to remove non-void return type warning
         return nullptr;
     }
-    
+
     // Replaces page in working with new page
     void replacePage(Page* prevPage, Page* newPage) {
         std::vector<Page*> newTime (working_memory[working_memory.size()-1].begin(), working_memory[working_memory.size()-1].end());
@@ -167,7 +167,7 @@ public:
         }
         std::cout << std::endl;
     }
-    
+
     // Increases age of all in working memory
     void ageAll() {
         for (int i = 0; i < num_frames; i++) {
@@ -176,7 +176,7 @@ public:
             }
         }
     }
-    
+
     // Deconstructor
     ~MemoryMap() {
     }
@@ -188,7 +188,7 @@ public:
 
 /*
  Old method
- 
+
  void scrambledBits(int shift, int interval) {
      // If current frame is on the interval and not at the start
      if (working_memory.size()-1 % interval == 0 && working_memory.size()-1 != 0) {

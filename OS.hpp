@@ -103,7 +103,7 @@ public:
             temp = new Page (i);
             disk_memory.push_back(temp);
         }
-        
+
         // Sets Bit to intialise length
         std::string tmpBit;
         for (int i = 0; i <= a; i++) {
@@ -122,10 +122,10 @@ public:
         for (int i = 0; i < commands.size(); i++) {
             time++;
             //DEBUG
-            // std::cout << "Time: " << time << ' ';
+            std::cout << "Time: " << time << ' ';
             pageNumber = addresses[i]/page_size;
             //DEBUG
-            // std::cout << "Page: "<< pageNumber << ' ';
+            std::cout << "Page: "<< pageNumber << ' ';
             incomingPage = disk_memory[pageNumber];
 
             //checks if the page will need to be written to disk if it is removed
@@ -135,12 +135,13 @@ public:
 
             //checks if page is currently in frames/working memory
             if (!map.findPage(incomingPage)) {
-                // std::cout << "MISS: " << ' ';
+                //DEBUG
+                std::cout << "MISS: " << ' ';
                 reads++;
 
                 //determines the page to replace based on the algorithm
                 pageToReplace = map.determinePageToReplace(algorithm, b);
-                
+
                 // If page was not found in previous frame, age by 0
                 for (int j = 0; j < numFrames; j++) {
                     std::string tmp = disk_memory[disk_memory.size()-1][j].getBit();
@@ -148,8 +149,8 @@ public:
                         disk_memory[disk_memory.size()-1][j].ageBit(0);
                     }
                 }
-                
-                
+
+
                 //replaces page, ensuring that any necessay parameters are reset
                 map.replacePage(pageToReplace,incomingPage);
                 if (pageToReplace != nullptr) {
@@ -161,11 +162,11 @@ public:
                 }
             }
             //DEBUG
-            // else {
-            //     std::cout << "HIT:  " << ' ';
-            // }
-            // std::cout << "frames:" << ' ';
-            // map.printCurrent();
+            else {
+                std::cout << "HIT:  " << ' ';
+            }
+            std::cout << "frames:" << ' ';
+            map.printCurrent();
 
             //sets the time last used and ages all pages in memory
             incomingPage->setTLU(time);
