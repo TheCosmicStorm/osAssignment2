@@ -9,9 +9,12 @@
 class Page {
     int age; //time page has existed
     int tlu; //time last used
-    std::string refBit; //history of past 8 cycles
-    bool write; //flag for whether the page need to be written to memory
     int page_number; //stores page number for printing
+    bool write; //flag for whether the page need to be written to memory
+    std::string refBit; //history of past 8 cycles
+    std::vector<int> workingSet; // Stores working set given delta
+   
+    
 public:
     //Contructor
     Page(int pageNum) {

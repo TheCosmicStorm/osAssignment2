@@ -16,6 +16,10 @@ private:
     std::vector<int> addresses;
     //stores a list of all pages
     std::vector<Page*> disk_memory;
+    //stores a list of all pages
+    std::vector<int> pages_left;
+    //stores a list of working set
+    std::vector<int> working_set;
     //page size from input
     int page_size;
     //current operation
@@ -173,6 +177,13 @@ public:
                     }
                 }
             }
+            // Updates working set with last pages; given delta
+            pages_left.clear();
+            for (int j = 0; j < delta; j++) {
+                pages_left.push_back(addresses[i+j]);
+            }
+            working_set = map.updWS(pages_left);
+            
             //DEBUG
             // else {
             //     std::cout << "HIT:  " << ' ';
@@ -180,7 +191,7 @@ public:
             //sets the time last used and ages all pages in memory
             incomingPage->setTLU(time);
             map.ageAll();
-
+            
             //DEBUG
             // std::cout << "frames:" << ' ';
             // if (algorithm == "ARB" || algorithm == "WSARB") {

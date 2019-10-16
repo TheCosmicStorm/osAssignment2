@@ -14,6 +14,8 @@ class MemoryMap {
 private:
     //stores references to Pages currently being operated on
     std::vector<std::vector<Page*> > working_memory;
+    // Stores working set given delta
+    std::vector<std::vector<Page*> > working_set;
     //stores the allocated space passed into the program
     int num_frames;
 public:
@@ -94,7 +96,6 @@ public:
                 leastRecentlyUsed = sameARB[i];
             }
         }
-
         return leastRecentlyUsed;
     }
 
@@ -137,6 +138,11 @@ public:
          else if (algorithm == "WSARB") {
              // Combines shifting the bits with the last one in ARB
              // Additionally uses frequency counter to determine what is replaced
+             
+             // Working Set
+             // Identify the most recent set of pages given delta, if not longer used drops from set
+             // Only stores no. once, ascending: this is locality the set of all numbers encompassed
+             // If workset > size of pages left; process suspended?
              return algorithmLRU();
          }
         // Just to remove non-void return type warning
@@ -195,6 +201,25 @@ public:
             }
         }
         std::cout << std::endl;
+    }
+    
+    // Updates the working set
+    std::vector<int> updWS(std::vector<int> pages_left) {
+        std::vector<int> wS;
+
+        for (unsigned int i = 0; i < pages_left.size(); i++) {
+            // For first elementement
+            if (i == 0) {
+                wS.push_back(pages_left[i]);
+            }
+            // If element from pages_left missing from wS; add
+            if (find(wS.begin(), wS.end(), pages_left[i]) == wS.end()) {
+                wS.push_back(pages_left[i]);
+            }
+        }
+        // Sort Ascending
+        sort(wS.begin(), wS.end());
+        return wS;
     }
 
     // Increases age of all in working memory
