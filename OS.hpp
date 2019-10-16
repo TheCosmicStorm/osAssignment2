@@ -11,19 +11,19 @@
 class OS
 {
 private:
-    //stores list of read/write commands in trace order
+    // Stores list of read/write commands in trace order
     std::vector<char> commands;
-    //stores list of memory address in trace order
+    // Stores list of memory address in trace order
     std::vector<int> addresses;
-    //stores a list of all pages
+    // Stores a list of all pages
     std::vector<Page*> disk_memory;
-    //page size from input
+    // Page size from input
     int page_size;
-    //current operation
+    // Current operation
     int time;
-    //number of reads
+    // Number of reads
     int reads;
-    //number of writes
+    // Number of writes
     int writes;
 
     //ARB and WSARB
@@ -132,7 +132,8 @@ public:
         int pageNumber;
         Page* incomingPage;
         Page* pageToReplace;
-        //runs through all the traces simulating the page replacement algorithm
+        
+        // Runs through all the traces simulating the page replacement algorithm
         for (int i = 0; i < commands.size(); i++)
         {
 
@@ -140,54 +141,47 @@ public:
             pageNumber = addresses[i]/page_size;
             incomingPage = disk_memory[pageNumber];
 
-            //DEBUG
-            // std::cout << "Time: " << time << ' ';
-            // std::cout << "Page: "<< pageNumber << ' ';
-
-            //checks if the page will need to be written to disk if it is removed
+            // Checks if the page will need to be written to disk if it is removed
             if (commands[i] == 'W')
             {
                 incomingPage->toBeWritten();
             }
 
-            //Checks to see if the current time is in the middle of a
-            // bit shift interval. If so it will shift the incomingPage
+            // Checks to see if the current time is in the middle of a
+            // Bit shift interval. If so it will shift the incomingPage
             if ((algorithm == "ARB" || algorithm == "WSARB") && ((time-1)%b != 0 || time-1 == 0)){
                 incomingPage->used();
             }
 
-            //If at the begining of an interval, run intervalShift
+            // If at the begining of an interval, run intervalShift
             if ((algorithm == "ARB" || algorithm == "WSARB") && (time-1) % b == 0)
             {
                 map.intervalShift();
                 incomingPage->used();
             }
 
-            //update the working set
+            // Update the working set
             if (algorithm == "WSARB")
             {
                 map.updWS(incomingPage, delta);
             }
 
-            //checks if page is currently in frames/working memory
+            // Checks if page is currently in frames/working memory
             if (!map.findPage(incomingPage))
             {
-                //DEBUG
-                // std::cout << "MISS: " << ' ';
-
-                //If page is not in working memory it must be read from the disk
+                // If page is not in working memory it must be read from the disk
                 reads++;
 
-                //determines the page to replace based on the algorithm
+                // Determines the page to replace based on the algorithm
                 pageToReplace = map.determinePageToReplace(algorithm);
 
-                //replaces page, ensuring that any necessay parameters are reset
+                // Replaces page, ensuring that any necessay parameters are reset
                 map.replacePage(pageToReplace,incomingPage);
                 if (pageToReplace != nullptr)
                 {
                     pageToReplace->resetAge();
 
-                    //checks if the page needs to be written to the disk
+                    // Checks if the page needs to be written to the disk
                     if (pageToReplace->needsToBeWritten())
                     {
                         writes++;
@@ -200,28 +194,11 @@ public:
                     }
                 }
             }
-            //DEBUG
-            // else
-            // {
-            //     std::cout << "HIT:  " << ' ';
-            // }
 
-            //sets the time last used and ages all pages in memory
+            // Sets the time last used and ages all pages in memory
             incomingPage->setTLU(time);
             map.ageAll();
             map.resetFrequency();
-
-            //DEBUG
-            // std::cout << "frames:" << ' ';
-            // if (algorithm == "ARB" || algorithm == "WSARB")
-            // {
-            //     map.printCurrentWithARB(empty_ARB);
-            // }
-            // else
-            // {
-            //     map.printCurrent();
-            // }
-            //std::cout << writes << '\n';
         }
     }
 
@@ -245,7 +222,7 @@ public:
         std::cout << reads << std::endl;
     }
 
-    //Destructor
+    // Destructor
     ~OS()
     {
         // Deletes all elements of disk_memory to clean up computer memory

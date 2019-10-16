@@ -8,16 +8,16 @@
 
 class Page
 {
-    int age; //time page has existed
-    int tlu; //time last used
-    int page_number; //stores page number for printing
-    bool write; //flag for whether the page need to be written to memory
-    std::string refBit; //history of past 8 cycles
-    int frequency; // frequency within the working set;
+    int age; // Time page has existed
+    int tlu; // Time last used
+    int page_number; // Stores page number for printing
+    bool write; // Flag for whether the page need to be written to memory
+    std::string refBit; // History of past 8 cycles
+    int frequency; // Frequency within the working set;
 
 
 public:
-    //Contructor
+    // Contructor
     Page(int pageNum)
     {
         age = 0;
@@ -84,7 +84,7 @@ public:
         refBit = newBit;
     }
 
-    //frequency functions
+    // Frequency functions
     void setFrequency(int freq)
     {
         frequency = freq;
@@ -108,13 +108,13 @@ public:
         write = false;
     }
 
-    //returns the page number (only in DEBUG)
+    // Returns the page number
     int getPageNum()
     {
         return page_number;
     }
 
-    //Destructor
+    // Destructor
     ~Page()
     {
 

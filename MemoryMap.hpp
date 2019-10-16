@@ -14,20 +14,20 @@
 class MemoryMap
 {
 private:
-    //stores references to Pages currently being operated on
+    // Stores references to Pages currently being operated on
     std::vector<std::vector<Page*> > working_memory;
     // Stores working set given delta
     std::vector<Page*> working_set;
     //stores the allocated space passed into the program
     int num_frames;
 
-    //Comparison function to sort by page number
+    // Comparison function to sort by page number
     static bool sortByPageNumber(Page* page1, Page* page2)
     {
         return page1->getPageNum() < page2->getPageNum();
     }
 public:
-    //Constructor
+    // Constructor
     MemoryMap(int allocatedSpace)
     {
         // Initializes empty vector onto memory map
@@ -87,6 +87,7 @@ public:
         return leastRecentlyUsed;
     }
 
+    // Algorithm for ARB
     Page* algorithmARB()
     {
         Page* leastRecentlyUsed = working_memory[working_memory.size()-1][0];
@@ -110,7 +111,7 @@ public:
             }
         }
 
-        //FIFO if there are multiple of the smallest
+        // FIFO if there are multiple of the smallest
         for (int i = 0; i < sameARB.size(); i++)
         {
             if (sameARB[i]->getAge() > leastRecentlyUsed->getAge())
@@ -120,7 +121,8 @@ public:
         }
         return leastRecentlyUsed;
     }
-
+    
+    // Finds the frequencies of all the pages within the working set
     std::vector<Page*> WSSmallestFreqPage()
     {
         std::vector<Page*> temp = working_set;
@@ -128,12 +130,9 @@ public:
         int frequency = 1;
         std::sort(temp.begin(),temp.end(), sortByPageNumber);
         Page* current = temp[0];
-        //finds the frequencies of all the pages within the working set
-        // std::cout << "Working Set:" << '\n';
-        // std::cout << temp[0]->getPageNum() << ' ';
+        
         for (int i = 1; i < temp.size(); i++)
         {
-            //std::cout << temp[i]->getPageNum() << ' ';
             if (current == temp[i])
             {
                 frequency++;
@@ -146,19 +145,14 @@ public:
             }
         }
         current->setFrequency(frequency);
-        // std::cout << '\n';
-
         int testFrequency;
         Page* leastFreqPage = working_memory[working_memory.size()-1][0];
-        //finds the page/s with the lowest frequency in working_memory
+        
+        // Finds the page/s with the lowest frequency in working_memory
         for (int j = 1; j < num_frames; j++)
         {
-            // std::cout << "Compare:" << leastFreqPage->getPageNum() << ": " <<
-            //     leastFreqPage->getFrequency() << "w/" <<
-            //     working_memory[working_memory.size()-1][j]->getPageNum() <<
-            //     ": " << working_memory[working_memory.size()-1][j]->getFrequency()
-            //     << '\n';
             testFrequency = working_memory[working_memory.size()-1][j]->getFrequency();
+            
             if (testFrequency < leastFreqPage->getFrequency())
             {
                 leastFreqPage = working_memory[working_memory.size()-1][j];
@@ -169,27 +163,26 @@ public:
                 output.push_back(working_memory[working_memory.size()-1][j]);
             }
         }
-
         output.push_back(leastFreqPage);
         return output;
     }
-
+    
+    // Algorithm for WSARB
     Page* algorithmWSARB()
     {
         int testRefBit;
-        //same Working Set frequency
+        // Same Working Set frequency
         std::vector<Page*> sameWSF = WSSmallestFreqPage();
         Page* leastRecentlyUsed = sameWSF[0];
         std::vector<Page*> sameARB;
-        // Find page to replace with smallest ARB
-
-        // if there is only one option to replace
+        
+        // Find page to replace with smallest ARB; If there is only one option to replace
         if (sameWSF.size() == 1)
         {
             return leastRecentlyUsed;
         }
 
-        //find the best option to replace using ARB
+        // Find the best option to replace using ARB
         for (int i = 1; i < sameWSF.size(); i++)
         {
             testRefBit = sameWSF[i]->integerARB();
@@ -207,7 +200,7 @@ public:
             }
         }
 
-        //FIFO if there are multiple of the smallest
+        // FIFO if there are multiple of the smallest
         for (int i = 0; i < sameARB.size(); i++)
         {
             if (sameARB[i]->getAge() > leastRecentlyUsed->getAge())
@@ -219,11 +212,11 @@ public:
         return leastRecentlyUsed;
     }
 
-    //At predetermined intervals it will perform a right bitShift for all page
+    // At predetermined intervals it will perform a right bitShift for all page
     // ARBs in memoryincomingPage
     void intervalShift()
     {
-        //For ARB/WSARB and at interval, for used page => bitShift 1, else bit shift 0
+        // For ARB/ WSARB and at interval, for used page => bitShift 1, else bit shift 0
         for (int j = 0; j < num_frames; j++)
         {
             if (working_memory[working_memory.size()-1][j] == nullptr)
@@ -240,7 +233,6 @@ public:
     // Determines based on the 4 algorithms, which page/frame gets replaced
     Page* determinePageToReplace(std::string algorithm)
     {
-
         // For empty working_memory
         for (int j = 0; j < num_frames; j++)
         {
@@ -249,7 +241,7 @@ public:
                 return nullptr;
             }
         }
-        //First In, First Out implementation
+        // First In, First Out implementation
         if (algorithm == "FIFO")
         {
             return algorithmFIFO();
@@ -263,19 +255,12 @@ public:
         else if (algorithm == "ARB")
         {
             return algorithmARB();
-         }
-         //Working-Set Additional Reference Bit implementation
-         else if (algorithm == "WSARB")
-         {
-             // Combines shifting the bits with the last one in ARB
-             // Additionally uses frequency counter to determine what is replaced
-
-             // Working Set
-             // Identify the most recent set of pages given delta, if not longer used drops from set
-             // Only stores no. once, ascending: this is locality the set of all numbers encompassed
-             // If workset > size of pages left; process suspended?
-             return algorithmWSARB();
-         }
+        }
+        // Working-Set Additional Reference Bit implementation
+        else if (algorithm == "WSARB")
+        {
+            return algorithmWSARB();
+        }
         // Just to remove non-void return type warning
         return nullptr;
     }
