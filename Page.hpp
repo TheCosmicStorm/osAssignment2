@@ -6,18 +6,20 @@
 
 #include <cmath>
 
-class Page {
+class Page
+{
     int age; //time page has existed
     int tlu; //time last used
     int page_number; //stores page number for printing
     bool write; //flag for whether the page need to be written to memory
     std::string refBit; //history of past 8 cycles
-    std::vector<int> workingSet; // Stores working set given delta
-   
-    
+    int frequency; // frequency within the working set;
+
+
 public:
     //Contructor
-    Page(int pageNum) {
+    Page(int pageNum)
+    {
         age = 0;
         tlu = 0;
         refBit = "";
@@ -28,66 +30,93 @@ public:
 
     //USEFUL FUNCTIONS
     // Age
-    void increaseAge() {
+    void increaseAge()
+    {
         age++;
     }
-    void resetAge() {
+    void resetAge()
+    {
         age = 0;
     }
-    int getAge() {
+    int getAge()
+    {
         return age;
     }
 
     // Time last used
-    void setTLU(int newTime) {
+    void setTLU(int newTime)
+    {
         tlu = newTime;
     }
-    int getTLU() {
+    int getTLU()
+    {
         return tlu;
     }
 
     // Reference Bit
-    void shiftRBit(std::string sel) {
+    void shiftRBit(std::string sel)
+    {
         refBit = sel + refBit;
         refBit.pop_back();
     }
-    void used() {
+    void used()
+    {
         refBit[0] = '1';
     }
-    std::string getBit() {
+    std::string getBit()
+    {
         return refBit;
     }
-    int integerARB() {
+    int integerARB()
+    {
         int intEquiv = 0;
-        for (int i = 0; i < refBit.length(); i++) {
-            if (refBit[i] == '1') {
+        for (int i = 0; i < refBit.length(); i++)
+        {
+            if (refBit[i] == '1')
+            {
                 intEquiv += pow(2,refBit.length()-i-1);
             }
         }
         return intEquiv;
     }
-    void setBit(std::string newBit) {
+    void setBit(std::string newBit)
+    {
         refBit = newBit;
     }
 
+    //frequency functions
+    void setFrequency(int freq)
+    {
+        frequency = freq;
+    }
+    int getFrequency()
+    {
+        return frequency;
+    }
+
     // Write functions
-    bool needsToBeWritten() {
+    bool needsToBeWritten()
+    {
         return write;
     }
-    void toBeWritten() {
+    void toBeWritten()
+    {
         write = true;
     }
-    void written() {
+    void written()
+    {
         write = false;
     }
 
     //returns the page number (only in DEBUG)
-    int getPageNum() {
+    int getPageNum()
+    {
         return page_number;
     }
 
     //Destructor
-    ~Page() {
+    ~Page()
+    {
 
     }
 };
